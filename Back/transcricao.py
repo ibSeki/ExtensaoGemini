@@ -1,10 +1,9 @@
+import subprocess
+import requests
+
 from dotenv import load_dotenv
 import os
 load_dotenv()
-
-import os
-import subprocess
-import requests
 
 # Configure sua chave da API AssemblyAI
 ASSEMBLYAI_API_KEY = os.getenv("API_KEY_TRANSCRICAO")
@@ -19,21 +18,26 @@ def download_audio_from_youtube(video_url):
     """Baixa o áudio de um vídeo do YouTube e converte para MP3."""
     try:
         output_path = "audio.mp3"
-        ffmpeg_path = r"C:\Users\colet\OneDrive\Documentos\ffmpeg-2024-11-18-git-970d57988d-full_build\bin\ffmpeg.exe"
-        command = [
-            "yt-dlp",
-            "--extract-audio",
-            "--audio-format", "mp3",
-            "--ffmpeg-location", ffmpeg_path,
-            "-o", output_path,
-            video_url
-        ]
-        subprocess.run(command, check=True)
-        print("Áudio baixado e convertido para MP3 com sucesso!")
-        return output_path
-    except subprocess.CalledProcessError as e:
-        print(f"Erro ao baixar ou converter o áudio: {e}")
+        command = f'yt-dlp --extract-audio --audio-format mp3 -o "{output_path}" "{video_url}"'
+
+        # Execute o comando e capture saída e erro
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+        # Print para debug
+        print("STDOUT:", result.stdout)
+        print("STDERR:", result.stderr)
+
+        if result.returncode == 0:
+            print("Áudio baixado com sucesso!")
+            return output_path
+        else:
+            print("Erro ao baixar o áudio:", result.stderr)
+            return None
+
+    except Exception as e:
+        print(f"Erro ao executar yt-dlp: {e}")
         return None
+
 
 def upload_audio(file_path):
     """Faz upload do arquivo de áudio para a API da AssemblyAI e retorna a URL do arquivo."""

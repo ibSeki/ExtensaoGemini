@@ -12,12 +12,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function checkAPI() {
     try {
-      const res = await fetch("http://127.0.0.1:5000/");
+      const res = await fetch("http://127.0.0.1:5000/process", {
+        method: "OPTIONS"
+      });
       return res.ok;
     } catch (error) {
       return false;
     }
-  }
+  }  
 
   processButton.addEventListener("click", async () => {
     const videoUrl = videoUrlInput.value.trim();
@@ -42,8 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("http://127.0.0.1:5000/process", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ video_url: videoUrl, language: language }),
-      });
+        body: JSON.stringify({ video_url: videoUrl, language: language })
+    });    
 
       spinner.style.display = "none";
 
