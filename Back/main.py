@@ -21,6 +21,7 @@ def process_video():
     data = request.json
     video_url = data.get("video_url")
     language = data.get("language")
+    num_topicos = data.get("num_topicos", 7)  # Padrão é 7 se não for enviado
 
     if not video_url or not language:
         return jsonify({"error": "URL do vídeo ou idioma não fornecido."}), 400
@@ -40,7 +41,7 @@ def process_video():
         delete_audio_file(audio_file)
         return jsonify({"error": "Erro ao transcrever o áudio."}), 500
 
-    topics = extract_topics_with_gemini(transcription)
+    topics = extract_topics_with_gemini(transcription, num_topicos)  # Passa o número de tópicos
     delete_audio_file(audio_file)
 
     if not topics:

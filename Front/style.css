@@ -27,15 +27,36 @@ h1 {
   text-align: center;
 }
 
-/* Inputs */
+/* Labels */
+label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-top: 10px;
+}
+
+/* Inputs e Selects */
 input, select, button {
-  margin: 10px 0;
+  margin: 5px 0 10px;
   padding: 10px;
   font-size: 14px;
   width: 100%;
   box-sizing: border-box;
   border-radius: 4px;
   border: 1px solid #ccc;
+}
+
+/* Estilo para os selects com setinha */
+select {
+  appearance: none;
+  background-color: #fff;
+  cursor: pointer;
+  padding-right: 30px; /* Espaço para a setinha */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'><path fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 15px;
 }
 
 /* Botão */
@@ -52,17 +73,18 @@ button:hover {
   transition: 0.3s;
 }
 
+/* Área de resposta */
 #response {
-  max-height: none; /* Permite que o conteúdo expanda sem limite de altura */
-  overflow-y: visible; /* Não exibe barra de rolagem */
-  padding: 10px; /* Espaço interno para melhor legibilidade */
-  background-color: #f9f9f9; /* Contraste com o texto */
-  border: 1px solid #ccc; /* Adiciona borda para destacar a área */
-  border-radius: 5px; /* Deixa a borda arredondada */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para realçar o container */
-}  
+  max-height: none;
+  overflow-y: visible;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-/* Feedback */
+/* Título dos tópicos */
 .success {
   color: #28a745;
   font-weight: bold;
@@ -73,7 +95,7 @@ button:hover {
   font-weight: bold;
 }
 
-/* Feedback visual */
+/* Spinner (Carregamento) */
 .spinner {
   margin-top: 10px;
   display: inline-block;
@@ -109,22 +131,16 @@ button:hover {
   font-weight: bold;
 }
 
-/* Espaçamento para o seletor de idioma */
-#language {
-  margin-bottom: 15px; /* Adiciona espaçamento abaixo do seletor */
-  z-index: 1; /* Garante que o dropdown fique acima de outros elementos */
-  appearance: none; /* Remove a aparência padrão do navegador */
-  background-color: #fff; /* Fundo branco para visibilidade */
-}
-
 /* Ajuste para evitar sobreposição */
-#language:focus {
-  outline: none; /* Remove borda padrão de foco */
-  border-color: #007bff; /* Destaca com azul ao focar */
+#language, #num-topicos {
+  margin-bottom: 15px;
+  z-index: 1;
+  appearance: none;
+  background-color: #fff;
 }
 
-/* Adiciona margem para melhor separação dos elementos */
-input[type="text"], select, button {
-  margin-top: 10px;
-  margin-bottom: 15px;
+/* Ajuste de foco */
+#language:focus, #num-topicos:focus {
+  outline: none;
+  border-color: #007bff;
 }

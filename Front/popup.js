@@ -2,28 +2,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const processButton = document.getElementById("process-button");
   const videoUrlInput = document.getElementById("video-url");
   const languageSelect = document.getElementById("language");
+  const topicsSelect = document.getElementById("num-topicos"); // Seletor de tópicos
   const responseDiv = document.getElementById("response");
   const spinner = document.getElementById("spinner");
 
-  if (!processButton || !videoUrlInput || !languageSelect || !responseDiv || !spinner) {
-    console.error("Erro: Alguns elementos do DOM não foram encontrados.");
-    return;
-  }
+  // Capturar a URL da aba ativa e preencher o campo se for do YouTube
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs.length > 0) {
+      const activeTabUrl = tabs[0].url;
+      console.log("🔍 URL capturada:", activeTabUrl); // Debug no console
 
-  async function checkAPI() {
-    try {
-      const res = await fetch("http://127.0.0.1:5000/process", {
-        method: "OPTIONS"
-      });
-      return res.ok;
-    } catch (error) {
-      return false;
+      if (activeTabUrl.includes("youtube.com/watch")) {
+        videoUrlInput.value = activeTabUrl;
+        console.log("✅ URL do YouTube detectada e inserida!");
+      } else {
+        console.log("⚠ URL não é de um vídeo do YouTube.");
+      }
+    } else {
+      console.log("❌ Nenhuma aba ativa encontrada!");
     }
-  }  
+  });
 
   processButton.addEventListener("click", async () => {
     const videoUrl = videoUrlInput.value.trim();
     const language = languageSelect.value;
+    const numTopicos = topicsSelect.value; // Captura a quantidade de tópicos escolhida
 
     responseDiv.textContent = "";
     spinner.style.display = "block";
@@ -34,18 +37,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!(await checkAPI())) {
-      responseDiv.innerHTML = `<span class="error">Erro: O servidor não está acessível. Certifique-se de que a API está rodando.</span>`;
-      spinner.style.display = "none";
-      return;
-    }
-
     try {
       const response = await fetch("http://127.0.0.1:5000/process", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ video_url: videoUrl, language: language })
-    });    
+        body: JSON.stringify({
+          video_url: videoUrl,
+          language: language,
+          num_topicos: parseInt(numTopicos) // Envia para o backend
+        })
+      });
 
       spinner.style.display = "none";
 
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .filter(topic => topic.trim() !== "")
           .map((topic, index) => `<li><strong>${index + 1}:</strong> ${topic.trim()}</li>`)
           .join("");
+
         responseDiv.innerHTML = `<span class="success">Tópicos:</span><ul>${topicsList}</ul>`;
       } else {
         const errorData = await response.json();

@@ -9,11 +9,11 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("API_KEY_GEMINI")
 genai.configure(api_key=GEMINI_API_KEY)
 
-def extract_topics_with_gemini(transcription):
-    """Usa a API do Google Gemini para gerar os 7 principais tópicos."""
+def extract_topics_with_gemini(transcription, num_topicos):
+    """Usa a API do Google Gemini para gerar a quantidade escolhida de tópicos."""
     try:
         prompt = f"""
-        Extraia os 7 principais tópicos abordados na seguinte transcrição e retorne uma lista clara e concisa:
+        Extraia os {num_topicos} principais tópicos abordados na seguinte transcrição e retorne uma lista clara e concisa:
 
         {transcription}
         """
@@ -25,3 +25,4 @@ def extract_topics_with_gemini(transcription):
     except Exception as e:
         print(f"Erro ao processar os tópicos com Google Gemini: {e}")
         return None
+
