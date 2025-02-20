@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Video Processor",
+  "name": "YouTube Video Processor - Gemini",
   "version": "1.0",
   "description": "Extensão que processa vídeos do YouTube e extrai tópicos.",
   "permissions": [
